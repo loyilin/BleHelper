@@ -14,6 +14,10 @@ public class APP extends Application {
     public void onCreate() {
         super.onCreate();
         BleHelperProtected.install(this);
-        BleHelper.getInstance().init(this,new BleConfig().setShowLog(true));
+        BleHelper.getInstance().init(this,new BleConfig()
+                .setShowLog(true)
+                .setRepeatConnect(true)
+                .setIntervals(10000)
+                .setCyclePower(true));
     }
 }

@@ -44,4 +44,12 @@
         android:layout_marginTop="50dp"
         android:text="扫描设备"
         app:layout_constraintTop_toBottomOf="@+id/tv5" />
+    <Button
+        android:id="@+id/bt2"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="升级到最新固件"
+        app:layout_constraintTop_toBottomOf="@+id/bt1" />
 </android.support.constraint.ConstraintLayout>
