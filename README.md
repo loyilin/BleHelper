@@ -11,7 +11,7 @@
 3. 避免使用okhttp等出现重复依赖，如果项目中没使用可以忽略
 ```Java
 implementation ('com.squareup.okhttp3:okhttp:3.10.0')  {
-        exclude group: 'com.squareup.okhttp3'
+        exclude module: 'okhttp'
     }
 ```
     
