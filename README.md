@@ -117,12 +117,17 @@ boolean state = BleHelper.getInstance().ismConnectionState();
 ```
 
 
-## 设备固件版本、连接状态、电量回调（可在多个Activity中同时接收）
+## 连接状态、打卡上传成功提醒、设备固件版本、电量回调（可在多个Activity中同时接收）
 ```Java
 BleHelper.getInstance().addCallBack(new BTCallBack(this){
             @Override
             public void OnConnected(boolean isconnected) {
                 //连接状态，true连接，false断开
+            }
+            
+            @Override
+            public void OnUploadedSuccessfully(int total) {
+                ToastUtils.showShort("成功上传了"+total+"条数据");
             }
 
             @Override
