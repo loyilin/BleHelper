@@ -11,7 +11,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 
 import com.blankj.utilcode.constant.PermissionConstants;
 import com.blankj.utilcode.util.PermissionUtils;
@@ -33,15 +32,12 @@ public class ScanBluetoothActivity extends Activity {
 
     private BluetoothAdapter.LeScanCallback le = new BluetoothAdapter.LeScanCallback() {
         public void onLeScan(final BluetoothDevice device, final int rssi, byte[] scanRecord) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    BLEDevice bleDevice = new BLEDevice(device.getName(), device.getAddress(), rssi);
+            runOnUiThread(() -> {
+                BLEDevice bleDevice = new BLEDevice(device.getName(), device.getAddress(), rssi);
+                if (!map.containsKey(bleDevice.getMac())) {
                     Log.i("Load", "获得蓝牙 地址：" + bleDevice.getMac());
-                    if (!map.containsKey(bleDevice.getMac())) {
-                        map.put(bleDevice.getMac(), bleDevice);
-                        adapter.setNewData(new ArrayList<>(map.values()));
-                    }
+                    map.put(bleDevice.getMac(), bleDevice);
+                    adapter.setNewData(new ArrayList<>(map.values()));
                 }
             });
         }
@@ -63,14 +59,11 @@ public class ScanBluetoothActivity extends Activity {
             }
         };
         recyclerview.setAdapter(adapter);
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter1, View view, int position) {
-                Intent intent = new Intent();
-                intent.putExtra("mac", adapter.getItem(position).getMac());
-                setResult(RESULT_OK, intent);
-                finish();
-            }
+        adapter.setOnItemClickListener((adapter1, view, position) -> {
+            Intent intent = new Intent();
+            intent.putExtra("mac", adapter.getItem(position).getMac());
+            setResult(RESULT_OK, intent);
+            finish();
         });
 
         BluetoothManager manager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);

@@ -105,6 +105,11 @@ public class MainActivity extends Activity {
             }
 
             @Override
+            public void OnUploadedSuccessfully(int total) {
+                ToastUtils.showShort("成功上传了"+total+"条数据");
+            }
+
+            @Override
             public void OnOTAProgress(int percent, int byteRate, int elapsedTime) {
                 bt2.setText("升级到最新固件"+percent +"%");
             }
@@ -179,6 +184,14 @@ public class MainActivity extends Activity {
             tv5.setText("连接状态：等待连接");
             BleHelper.getInstance().connect(mac);
             bt.setText("断开连接");
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (BleHelper.getInstance().ismConnectionState()){
+            BleHelper.getInstance().disconnect();
         }
     }
 }
