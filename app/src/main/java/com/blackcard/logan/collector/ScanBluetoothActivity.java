@@ -62,6 +62,7 @@ public class ScanBluetoothActivity extends Activity {
         adapter.setOnItemClickListener((adapter1, view, position) -> {
             Intent intent = new Intent();
             intent.putExtra("mac", adapter.getItem(position).getMac());
+            intent.putExtra("name", adapter.getItem(position).getName());
             setResult(RESULT_OK, intent);
             finish();
         });

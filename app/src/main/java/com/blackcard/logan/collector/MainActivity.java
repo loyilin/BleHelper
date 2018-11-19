@@ -2,6 +2,7 @@ package com.blackcard.logan.collector;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -32,6 +33,7 @@ public class MainActivity extends Activity {
 
     private Button bt;
     private Button bt2;
+    private TextView tv1;
     private TextView tv4;
     private TextView tv5;
 
@@ -41,7 +43,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
 
-        final TextView tv1 = findViewById(R.id.tv1);
+        tv1 = findViewById(R.id.tv1);
         final TextView tv2 = findViewById(R.id.tv2);
         final TextView tv3 = findViewById(R.id.tv3);
         tv4 = findViewById(R.id.tv4);
@@ -60,6 +62,7 @@ public class MainActivity extends Activity {
                 tv3.setText("剩余电量：");
                 tv4.setText("MAC地址：");
                 tv5.setText("连接状态：");
+                clearDev();
             }
         });
         bt2.setOnClickListener(v -> PermissionUtils.permission(PermissionConstants.STORAGE)
@@ -80,15 +83,15 @@ public class MainActivity extends Activity {
         BleHelper.getInstance().addCallBack(new BTCallBack(this) {
             @Override
             public void OnConnected(boolean isconnected) {
-                tv1.setText("设备名称：" + BleHelper.getInstance().getCurrentDeviceNotNull().getName());
+                tv1.setText("设备名称：" + getDevName());
+                tv4.setText("MAC地址：" + getMac());
+                if (getMac().isEmpty())
                 if (!isconnected) {
                     tv2.setText("固件版本：");
                     tv3.setText("剩余电量：");
                 }
-                tv5.setText("连接状态：" + (isconnected ? "已连接" : "等待连接"));
+                tv5.setText("连接状态：" + (getMac().isEmpty()?"":(isconnected ? "已连接" : "等待连接")));
                 if (!BleHelper.getInstance().isconnect()) {
-                    tv4.setText("MAC地址：");
-                    tv5.setText("连接状态：");
                     bt2.setVisibility(View.GONE);
                 }
             }
@@ -106,12 +109,12 @@ public class MainActivity extends Activity {
 
             @Override
             public void OnUploadedSuccessfully(int total) {
-                ToastUtils.showShort("成功上传了"+total+"条数据");
+                ToastUtils.showShort("成功上传了" + total + "条数据");
             }
 
             @Override
             public void OnOTAProgress(int percent, int byteRate, int elapsedTime) {
-                bt2.setText("升级到最新固件"+percent +"%");
+                bt2.setText("升级到最新固件" + percent + "%");
             }
 
             @Override
@@ -125,6 +128,7 @@ public class MainActivity extends Activity {
             public void OnOTAFail(String error) {
             }
         });
+        if (!getMac().isEmpty()) BleHelper.getInstance().connect(getMac());
     }
 
     private void OTAupload() {
@@ -147,10 +151,10 @@ public class MainActivity extends Activity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 OtaBean bean = new Gson().fromJson(response.body().string(), OtaBean.class);
-                if (!bean.getResult().equals("Sucess"))return;
+                if (!bean.getResult().equals("Sucess")) return;
                 DownloadUtil util = new DownloadUtil();
                 util.download("http://szydak.eicp.net:82/ezx_syset/download?filename="
-                                +bean.getData1().getFilename()+"&filepath="+bean.getData1().getPath()
+                                + bean.getData1().getFilename() + "&filepath=" + bean.getData1().getPath()
                         , Environment.getExternalStorageDirectory().getAbsolutePath()
                         , bean.getData1().getFilename(), new DownloadUtil.DownloadProgress() {
                             @Override
@@ -160,7 +164,7 @@ public class MainActivity extends Activity {
 
                             @Override
                             public void onProgressChanged(long read, long contentLength, int percentage) {
-                                Log.e(getClass().getName(),"read="+read+",contentLength="+contentLength+",percentage="+percentage);
+                                Log.e(getClass().getName(), "read=" + read + ",contentLength=" + contentLength + ",percentage=" + percentage);
                             }
 
                             @Override
@@ -180,6 +184,9 @@ public class MainActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 200 && resultCode == RESULT_OK) {
             String mac = data.getStringExtra("mac");
+            String name = data.getStringExtra("name");
+            saveDev(name, mac);
+            tv1.setText("设备名称：" + name);
             tv4.setText("MAC地址：" + mac);
             tv5.setText("连接状态：等待连接");
             BleHelper.getInstance().connect(mac);
@@ -190,8 +197,37 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (BleHelper.getInstance().ismConnectionState()){
+        if (BleHelper.getInstance().ismConnectionState()) {
             BleHelper.getInstance().disconnect();
         }
+    }
+
+    private String getDevName() {
+        return getSharedPreferences()
+                .getString("name", "");
+    }
+
+    private String getMac() {
+        return getSharedPreferences()
+                .getString("mac", "");
+    }
+
+    private void saveDev(String name, String mac) {
+        getSharedPreferences()
+                .edit()
+                .putString("name", name)
+                .putString("mac", mac)
+                .apply();
+    }
+
+    private void clearDev() {
+        getSharedPreferences()
+                .edit()
+                .clear()
+                .apply();
+    }
+
+    private SharedPreferences getSharedPreferences() {
+        return getSharedPreferences("collector.xml", MODE_PRIVATE);
     }
 }
