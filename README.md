@@ -53,7 +53,7 @@ public class APP extends Application {
 BleConfig config = new BleConfig()
                 .setRepeatConnect(true)//断开自动重连 默认true
                 .setCyclePower(true)//持续获取电量  默认true
-                .setIntervals(60000)//获取电量间隔时间 单位毫秒不能小于，默认10000，不小于10000
+                .setIntervals(60000)//获取电量间隔时间 单位毫秒，值不能小于10000，默认10000
                 .setShowLog(true);//开启log输出  默认false
         
         BleHelper.getInstance().init(this, config);
