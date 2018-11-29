@@ -85,13 +85,10 @@ public class MainActivity extends Activity {
             public void OnConnected(boolean isconnected) {
                 tv1.setText("设备名称：" + getDevName());
                 tv4.setText("MAC地址：" + getMac());
-                if (getMac().isEmpty())
+                tv5.setText("连接状态：" + (getMac().isEmpty() ? "" : (isconnected ? "已连接" : "等待连接")));
                 if (!isconnected) {
                     tv2.setText("固件版本：");
                     tv3.setText("剩余电量：");
-                }
-                tv5.setText("连接状态：" + (getMac().isEmpty()?"":(isconnected ? "已连接" : "等待连接")));
-                if (!BleHelper.getInstance().isconnect()) {
                     bt2.setVisibility(View.GONE);
                 }
             }
@@ -128,7 +125,13 @@ public class MainActivity extends Activity {
             public void OnOTAFail(String error) {
             }
         });
-        if (!getMac().isEmpty()) BleHelper.getInstance().connect(getMac());
+        if (!getMac().isEmpty()) {
+            tv1.setText("设备名称：" + getDevName());
+            tv4.setText("MAC地址：" + getMac());
+            tv5.setText("连接状态：等待连接");
+            bt.setText("断开连接");
+            BleHelper.getInstance().connect(getMac());
+        }
     }
 
     private void OTAupload() {
@@ -139,6 +142,7 @@ public class MainActivity extends Activity {
                 .build();
         Request request = new Request.Builder()
                 .url("http://szydak.eicp.net:82/ezx_syset/apk/checkDeviceVersion")
+                .addHeader("user_id","433")
                 .get()
                 .build();
         client.newCall(request).enqueue(new Callback() {
@@ -151,7 +155,7 @@ public class MainActivity extends Activity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 OtaBean bean = new Gson().fromJson(response.body().string(), OtaBean.class);
-                if (!bean.getResult().equals("Sucess")) return;
+                if (bean == null || !bean.getResult().equals("Sucess")) return;
                 DownloadUtil util = new DownloadUtil();
                 util.download("http://szydak.eicp.net:82/ezx_syset/download?filename="
                                 + bean.getData1().getFilename() + "&filepath=" + bean.getData1().getPath()

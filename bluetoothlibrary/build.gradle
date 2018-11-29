@@ -1,4 +1,4 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 
 
@@ -10,7 +10,6 @@ android {
 
 
     defaultConfig {
-        applicationId "com.blackcard.logan.bluetoothlibrary"
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1

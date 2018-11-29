@@ -19,7 +19,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.logan.bluetoothlibrary.bean.BLEDevice;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,14 +31,17 @@ public class ScanBluetoothActivity extends Activity {
 
     private BluetoothAdapter.LeScanCallback le = new BluetoothAdapter.LeScanCallback() {
         public void onLeScan(final BluetoothDevice device, final int rssi, byte[] scanRecord) {
-            runOnUiThread(() -> {
-                BLEDevice bleDevice = new BLEDevice(device.getName(), device.getAddress(), rssi);
-                if (!map.containsKey(bleDevice.getMac())) {
-                    Log.i("Load", "获得蓝牙 地址：" + bleDevice.getMac());
-                    map.put(bleDevice.getMac(), bleDevice);
-                    adapter.setNewData(new ArrayList<>(map.values()));
-                }
-            });
+            if (device.getAddress().startsWith("08:7C") | device.getAddress().startsWith("D9:AD")){
+                runOnUiThread(() -> {
+                    BLEDevice bleDevice = new BLEDevice(device.getName(), device.getAddress(), rssi);
+                    if (!map.containsKey(bleDevice.getMac())) {
+                        Log.i("Load", "获得蓝牙 地址：" + bleDevice.getMac());
+                        map.put(bleDevice.getMac(), bleDevice);
+                        adapter.getData().add(bleDevice);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
         }
     };
 
@@ -51,11 +53,12 @@ public class ScanBluetoothActivity extends Activity {
         RecyclerView recyclerview = findViewById(R.id.recyclerview);
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
         recyclerview.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        adapter = new BaseQuickAdapter<BLEDevice, BaseViewHolder>(android.R.layout.simple_list_item_1) {
+        adapter = new BaseQuickAdapter<BLEDevice, BaseViewHolder>(android.R.layout.simple_list_item_1,null) {
             @Override
             protected void convert(BaseViewHolder helper, BLEDevice item) {
                 helper.setText(android.R.id.text1, (item.getName().isEmpty() ?
-                        "未知设备" : item.getName()) + "\n" + item.getMac());
+                        "未知设备" : item.getName()) + "\n" + item.getMac())
+                        .getConvertView().setPadding(30,20,30,20);
             }
         };
         recyclerview.setAdapter(adapter);
@@ -92,6 +95,5 @@ public class ScanBluetoothActivity extends Activity {
                         ToastUtils.showShort("用户拒绝权限");
                     }
                 }).request();
-
     }
 }
