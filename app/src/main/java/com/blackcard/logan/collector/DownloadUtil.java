@@ -3,7 +3,6 @@ package com.blackcard.logan.collector;
 import android.os.Handler;
 import android.os.Looper;
 
-import org.greenrobot.greendao.annotation.NotNull;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -55,7 +54,7 @@ public class DownloadUtil {
      */
 
     public DownloadUtil download(final String url, final String fileDir, final String fileName
-            , @NotNull final DownloadProgress listener) {
+            , final DownloadProgress listener) {
         this.url = url;
         this.fileDir = fileDir;
         this.fileName = fileName;

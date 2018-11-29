@@ -2,6 +2,7 @@ package com.blackcard.logan.collector;
 
 import android.app.Application;
 
+import com.jiagu.sdk.BleHelperProtected;
 import com.logan.bluetoothlibrary.BleConfig;
 import com.logan.bluetoothlibrary.BleHelper;
 
@@ -12,7 +13,7 @@ public class APP extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-//        BleHelperProtected.install(this);
+        BleHelperProtected.install(this);
         BleHelper.getInstance().init(this,new BleConfig()
                 .setShowLog(true)
                 .setRepeatConnect(true)
