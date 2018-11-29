@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.github.dcendents.android-maven'
 
 
-group='com.github.loyilin'
+group = 'com.github.loyilin'
 
 android {
     compileSdkVersion 28
@@ -38,6 +38,31 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
 
+
+
+
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    failOnError false
+    source = android.sourceSets.main.java.sourceFiles
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    classpath += configurations.compile
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.getDestinationDir()
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
 
 
 
