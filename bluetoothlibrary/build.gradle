@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
+apply from: 'https://raw.githubusercontent.com/adwiv/android-fat-aar/master/fat-aar.gradle'
 
 
 group = 'com.github.loyilin'
@@ -36,7 +37,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-    api files('libs/bluetoothlibrary.aar')
+    embedded files('libs/bluetoothlibrary.aar')
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'net.zetetic:android-database-sqlcipher:3.5.9@aar'
