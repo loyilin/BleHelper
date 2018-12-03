@@ -128,8 +128,8 @@
     <orderEntry type="library" name="Gradle: com.android.support:support-annotations:28.0.0@jar" level="project" />
     <orderEntry type="library" name="Gradle: android.arch.lifecycle:runtime-1.1.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: net.sf.kxml:kxml2:2.3.0@jar" level="project" />
-    <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\Administrator\.gradle\caches\transforms-1\files-1.1\bluelibrary.aar\5ab00d658d02df7d589b2584e3af090a:unspecified@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:customview-28.0.0" level="project" />
+    <orderEntry type="library" name="Gradle: __local_aars__:C.\Users\Administrator\.gradle\caches\transforms-1\files-1.1\bluelibrary.aar\7e73de99156e4262498289555656f46b:unspecified@jar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.android.support.test:runner-1.0.2" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.8.5@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:3.11.0@jar" level="project" />
