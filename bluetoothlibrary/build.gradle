@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
-apply from: 'https://raw.githubusercontent.com/adwiv/android-fat-aar/master/fat-aar.gradle'
 
 
 group = 'com.github.loyilin'
@@ -27,7 +26,12 @@ android {
         }
     }
 
+    lintOptions {
+        abortOnError false
+    }
 }
+
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -37,11 +41,14 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-    embedded files('libs/bluetoothlibrary.aar')
+    api files('libs/bluelibrary.aar')
+//    api (name:'bluelibrary', ext:'aar')
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'net.zetetic:android-database-sqlcipher:3.5.9@aar'
     implementation 'com.google.code.gson:gson:2.8.5'
+
+    implementation 'com.github.lygttpod:SuperTextView:2.1.8'
 }
 
 
@@ -62,7 +69,7 @@ task javadoc(type: Javadoc) {
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
-    from javadoc.getDestinationDir()
+    from javadoc.destinationDir
 }
 
 artifacts {
