@@ -42,6 +42,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     api files('libs/bluelibrary.aar')
+    api files('libs/Trasense_SDK20170918.jar')
 //    api files('libs/bluetooth-release.aar.aar')
 //    api (name:'bluelibrary', ext:'aar')
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
