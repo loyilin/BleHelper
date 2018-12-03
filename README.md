@@ -1,6 +1,6 @@
 # Collector
 # 蓝牙采集器工具使用文档
-[![Release](https://jitpack.io/v/User/Repo.svg)](https://jitpack.io/#User/Repo)
+[![Release](https://jitpack.io/v/loyilin/collector.svg)](https://jitpack.io/#loyilin/collector)
 
 ## 如何使用
 1. [点我下载依赖包](http://gitcafe.com)
