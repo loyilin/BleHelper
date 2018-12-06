@@ -168,7 +168,7 @@ public class MainActivity extends Activity {
 
                             @Override
                             public void onProgressChanged(long read, long contentLength, int percentage) {
-                                Log.e(getClass().getName(), "read=" + read + ",contentLength=" + contentLength + ",percentage=" + percentage);
+                                Log.d(getClass().getName(), "read=" + read + ",contentLength=" + contentLength + ",percentage=" + percentage);
                             }
 
                             @Override
