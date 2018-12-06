@@ -2,12 +2,8 @@
 # 蓝牙采集器工具使用文档
 [![Release](https://jitpack.io/v/loyilin/collector.svg)](https://jitpack.io/#loyilin/collector)
 
-## 如何使用
-1. 构建环境
-需要minSdkVersion大于或等于19，否则将无法使用，注意Android6.0及以上手机系统需要开启定位权限和定位功能，否则扫描不到设备。
-
-2. 引入到项目中
-2.1 在根目录build.gradle文件中repositories方法中添加:
+## 引入到项目中
+1 在根目录build.gradle文件中repositories方法中添加:
 ````Java
 allprojects {
 		repositories {
@@ -17,14 +13,15 @@ allprojects {
 	}
 ```
 
-2.2  添加依赖关系
+2  添加依赖关系
 ````Java
 dependencies {
 	        implementation 'com.github.loyilin:collector:version'
 	}
 ```
 
-3. 避免多个依赖重复，如果项目中没使用可以忽略
+## 如何避免重复依赖
+避免多个依赖重复，如果项目中没使用可以忽略
 ```Java
 android {
     ...
@@ -172,6 +169,8 @@ BleHelper.getInstance().addCallBack(new BTCallBack(this){
         });
 ```
 
+## 构建环境
+需要minSdkVersion大于或等于19，否则将无法使用，注意Android6.0及以上手机系统需要开启定位权限和定位功能，否则扫描不到设备。
 
 
 
