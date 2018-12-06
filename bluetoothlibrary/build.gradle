@@ -5,13 +5,13 @@ apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.loyilin'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 19
 
 
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 28
+        targetSdkVersion 19
         versionCode 1
         versionName "1.1.8"
 
@@ -35,19 +35,11 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-
     api files('libs/BleHelper.jar')
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'net.zetetic:android-database-sqlcipher:3.5.9@aar'
     implementation 'com.google.code.gson:gson:2.8.5'
-
-    implementation 'com.github.lygttpod:SuperTextView:2.1.8'
 }
 
 

@@ -43,13 +43,13 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
 
-        tv1 = findViewById(R.id.tv1);
-        final TextView tv2 = findViewById(R.id.tv2);
-        final TextView tv3 = findViewById(R.id.tv3);
-        tv4 = findViewById(R.id.tv4);
-        tv5 = findViewById(R.id.tv5);
-        bt = findViewById(R.id.bt1);
-        bt2 = findViewById(R.id.bt2);
+        tv1 = (TextView) findViewById(R.id.tv1);
+        final TextView tv2 = (TextView) findViewById(R.id.tv2);
+        final TextView tv3 = (TextView) findViewById(R.id.tv3);
+        tv4 = (TextView) findViewById(R.id.tv4);
+        tv5 = (TextView) findViewById(R.id.tv5);
+        bt = (Button) findViewById(R.id.bt1);
+        bt2 = (Button) findViewById(R.id.bt2);
 
         bt.setOnClickListener(v -> {
             if (bt.getText().toString().equals("扫描设备")) {

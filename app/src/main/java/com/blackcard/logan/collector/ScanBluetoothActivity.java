@@ -50,7 +50,7 @@ public class ScanBluetoothActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scan_bluetooth);
 
-        RecyclerView recyclerview = findViewById(R.id.recyclerview);
+        RecyclerView recyclerview = (RecyclerView) findViewById(R.id.recyclerview);
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
         recyclerview.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         adapter = new BaseQuickAdapter<BLEDevice, BaseViewHolder>(android.R.layout.simple_list_item_1,null) {
