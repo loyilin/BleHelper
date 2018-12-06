@@ -6,18 +6,18 @@
 1 在根目录build.gradle文件中repositories方法中添加:
 ````Java
 allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
+	repositories {
+		...
+		maven { url 'https://jitpack.io' }
 	}
+}
 ````
 
 2 添加依赖关系
 ````Java
 dependencies {
-	        implementation 'com.github.loyilin:collector:version'
-	}
+	implementation 'com.github.loyilin:collector:version'
+}
 ````
 
 ## 如何避免重复依赖
