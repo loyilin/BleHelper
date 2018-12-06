@@ -3,19 +3,10 @@
 [![Release](https://jitpack.io/v/loyilin/collector.svg)](https://jitpack.io/#loyilin/collector)
 
 ## 如何使用
-1. [点我下载依赖包](http://gitcafe.com)
-
-2. 构建环境
+1. 构建环境
 需要minSdkVersion大于或等于19，否则将无法使用，注意Android6.0及以上手机系统需要开启定位权限和定位功能，否则扫描不到设备。
 
-3. 避免使用okhttp等出现重复依赖，如果项目中没使用可以忽略
-```Java
-implementation ('com.squareup.okhttp3:okhttp:3.10.0')  {
-        exclude module: 'okhttp'
-    }
-```
-    
-4. 避免多个依赖重复，如果项目中没使用可以忽略
+2. 避免多个依赖重复，如果项目中没使用可以忽略
 ```Java
 android {
     ...
@@ -42,9 +33,7 @@ public class APP extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        //注意顺序，顺序错误会报错
-        BleHelperProtected.install(this);
-        BleHelper.getInstance().init(this,new BleConfig().setShowLog(true));
+        BleHelper.getInstance().init(this);
     }
 }
 ```
