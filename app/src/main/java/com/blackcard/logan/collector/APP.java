@@ -12,7 +12,6 @@ public class APP extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-//        BleHelperProtected.install(this);
         BleHelper.getInstance().init(this,new BleConfig()
                 .setShowLog(true)
                 .setRepeatConnect(true)

@@ -142,7 +142,6 @@ public class MainActivity extends Activity {
                 .build();
         Request request = new Request.Builder()
                 .url("http://szydak.eicp.net:82/ezx_syset/apk/checkDeviceVersion")
-                .addHeader("user_id","433")
                 .get()
                 .build();
         client.newCall(request).enqueue(new Callback() {
