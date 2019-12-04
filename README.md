@@ -1,6 +1,6 @@
 # Collector
 # 蓝牙采集器工具使用文档
-![Image text](https://raw.github.com/yourName/repositpry/master/yourprojectName/img-folder/test.jpg)
+![Image text](https://jitpack.io/v/loyilin/collector.svg)
 
 ## 引入到项目中
 1 在根目录build.gradle文件中repositories方法中添加:
