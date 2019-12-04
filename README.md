@@ -1,6 +1,4 @@
 # Collector
-[![](https://jitpack.io/v/loyilin/collector.svg)](https://jitpack.io/#loyilin/collector)
-![](http://www.baidu.com/img/bdlogo.gif)  
 # 蓝牙采集器工具使用文档
 
 ## 引入到项目中
