@@ -12,11 +12,14 @@ import android.widget.TextView;
 
 import com.blackcard.logan.collector.bean.OtaBean;
 import com.blankj.utilcode.constant.PermissionConstants;
+import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.PermissionUtils;
+import com.blankj.utilcode.util.TimeUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.google.gson.Gson;
-import com.logan.bluetoothlibrary.BTCallBack;
 import com.logan.bluetoothlibrary.BleHelper;
+import com.logan.bluetoothlibrary.bean.BTBean;
+import com.logan.bluetoothlibrary.itf.BTCallBack;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,7 +58,7 @@ public class MainActivity extends Activity {
             if (bt.getText().toString().equals("扫描设备")) {
                 startActivityForResult(new Intent(MainActivity.this, ScanBluetoothActivity.class), 200);
             } else {
-                BleHelper.getInstance().disconnect();
+                BleHelper.getInstance().disconnect(MainActivity.this);
                 bt.setText("扫描设备");
                 tv1.setText("设备名称：");
                 tv2.setText("固件版本：");
@@ -82,7 +85,7 @@ public class MainActivity extends Activity {
 
         BleHelper.getInstance().addCallBack(new BTCallBack(this) {
             @Override
-            public void OnConnected(boolean isconnected) {
+            public void onConnected(boolean isconnected) {
                 tv1.setText("设备名称：" + getDevName());
                 tv4.setText("MAC地址：" + getMac());
                 tv5.setText("连接状态：" + (getMac().isEmpty() ? "" : (isconnected ? "已连接" : "等待连接")));
@@ -94,35 +97,51 @@ public class MainActivity extends Activity {
             }
 
             @Override
-            public void OnVersion(String version) {
+            public void onVersion(String version) {
                 tv2.setText("固件版本：" + version);
                 bt2.setVisibility(View.VISIBLE);
             }
 
             @Override
-            public void OnElectric(int electric, String lastcharge, boolean ischarge) {
-                tv3.setText("剩余电量：" + (ischarge ? "正在充电中" : electric + "%\t\t\t\t上次充电时间：" + lastcharge));
+            public void onPunch(BTBean card) {
+                ToastUtils.showShort("在线打卡：" + card.getTab_id());
             }
 
             @Override
-            public void OnUploadedSuccessfully(int total) {
-                ToastUtils.showShort("成功上传了" + total + "条数据");
+            public void onOffData(int total) {
+                ToastUtils.showShort("查询到离线数据 " + total + "条");
             }
 
             @Override
-            public void OnOTAProgress(int percent, int byteRate, int elapsedTime) {
+            public void onOffProgress(int current, int total) {
+                LogUtils.e("离线数据进度：当前第" + current + "条，共" + total + "条");
+            }
+
+            @Override
+            public void onOffComplete(List<BTBean> data) {
+                ToastUtils.showShort("离线数据读取完成 共" + data.size() + "条");
+            }
+
+            @Override
+            public void onElectric(int electric, long lastcharge, boolean ischarge) {
+                tv3.setText("剩余电量：" + (ischarge ? "正在充电中" : TimeUtils.millis2String(lastcharge) + "%\t\t\t\t上次充电时间：" + lastcharge));
+            }
+
+            @Override
+            public void onOTAProgress(int percent, int byteRate, int elapsedTime) {
                 bt2.setText("升级到最新固件" + percent + "%");
             }
 
             @Override
-            public void OnOTAComplete() {
+            public void onOTAComplete() {
                 bt2.setText("升级到最新固件");
                 bt.setEnabled(true);
                 bt2.setEnabled(true);
             }
 
             @Override
-            public void OnOTAFail(String error) {
+            public void onOTAFail(String error) {
+                ToastUtils.showShort(error);
             }
         });
         if (!getMac().isEmpty()) {
@@ -130,7 +149,7 @@ public class MainActivity extends Activity {
             tv4.setText("MAC地址：" + getMac());
             tv5.setText("连接状态：等待连接");
             bt.setText("断开连接");
-            BleHelper.getInstance().connect(getMac());
+            BleHelper.getInstance().connect(this, getMac());
         }
     }
 
@@ -192,7 +211,7 @@ public class MainActivity extends Activity {
             tv1.setText("设备名称：" + name);
             tv4.setText("MAC地址：" + mac);
             tv5.setText("连接状态：等待连接");
-            BleHelper.getInstance().connect(mac);
+            BleHelper.getInstance().connect(this, mac);
             bt.setText("断开连接");
         }
     }
@@ -200,9 +219,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (BleHelper.getInstance().ismConnectionState()) {
-            BleHelper.getInstance().disconnect();
-        }
+        BleHelper.getInstance().disconnect(this);
     }
 
     private String getDevName() {
