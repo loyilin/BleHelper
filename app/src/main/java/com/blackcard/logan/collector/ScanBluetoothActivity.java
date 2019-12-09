@@ -19,6 +19,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.logan.bluetoothlibrary.bean.BLEDevice;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +32,11 @@ public class ScanBluetoothActivity extends Activity {
 
     private BluetoothAdapter.LeScanCallback le = new BluetoothAdapter.LeScanCallback() {
         public void onLeScan(final BluetoothDevice device, final int rssi, byte[] scanRecord) {
+            if (BuildConfig.DEBUG) Log.d("LeScan", String.format("设备名 = %2s, mac = %2s\n广播 = %2s"
+                    , device.getName(), device.getAddress(), Arrays.toString(scanRecord)));
             BLEDevice bleDevice = new BLEDevice(device.getName(), device.getAddress(), rssi, scanRecord);
             if (!map.containsKey(bleDevice.getMac()) /*&& (bleDevice.getDevType() == BLEDevice.DeviceType.XIONGKA || bleDevice.getDevType() == BLEDevice.DeviceType.CAIJIKA)*/){
-                Log.i("Load", "获得蓝牙 地址：" + bleDevice.getMac());
+                Log.d("LeScan", "获得蓝牙 地址：" + bleDevice.getMac());
                 map.put(bleDevice.getMac(), bleDevice);
                 adapter.getData().add(bleDevice);
                 adapter.notifyDataSetChanged();
@@ -109,7 +112,7 @@ public class ScanBluetoothActivity extends Activity {
     }
 
     private String getJIZHANElectric(BLEDevice device){
-        if (device.getDevType() == BLEDevice.DeviceType.JIZHAN) return device.getJIZHANElectric();
+        if (device.getDevType() == BLEDevice.DeviceType.JIZHAN) return "电量：" + device.getJIZHANElectricRate();
         else return "";
     }
 }

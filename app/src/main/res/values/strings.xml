@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Collector</string>
+    <string name="ScanBluetoothActivity">正在扫描蓝牙设备…</string>
 </resources>

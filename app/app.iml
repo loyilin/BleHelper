@@ -101,7 +101,7 @@
     <orderEntry type="library" name="Gradle: com.android.support:recyclerview-v7:25.4.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.35@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.blankj:utilcode:1.19.4@aar" level="project" />
-    <orderEntry type="library" name="Gradle: com.github.loyilin:collector:1.5.1@aar" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.loyilin:collector:1.5.2@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:animated-vector-drawable:25.4.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-vector-drawable:25.4.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.android.support:support-v4:25.4.0@aar" level="project" />
