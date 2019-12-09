@@ -189,7 +189,7 @@ public class MainActivity extends Activity {
                         , bean.getData1().getFilename(), new DownloadUtil.DownloadProgress() {
                             @Override
                             public void onCompleted(File file) {
-                                BleHelper.getInstance().startOtaUpdate(file.getAbsolutePath());
+                                BleHelper.getInstance().startOtaUpdate(file);
                             }
 
                             @Override
