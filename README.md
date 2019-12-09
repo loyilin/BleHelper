@@ -15,7 +15,7 @@ allprojects {
 2 添加依赖关系
 ````Java
 dependencies {
-	implementation 'com.github.loyilin:collector:1.5.0'
+	implementation 'com.github.loyilin:collector:1.5.1'
 }
 ````
 
@@ -120,7 +120,6 @@ String mac = device.getMac();
 boolean state = BleHelper.getInstance().isConnect();
 ````
 
-
 ## 连接状态、打卡、离线数据、设备固件版本、电量回调（可在多个Activity中同时接收）
 ```Java
 BleHelper.getInstance().addCallBack(new BTCallBack(this){
@@ -198,5 +197,27 @@ BleHelper.getInstance().addCallBack(new BTCallBack(this){
         callback.destroy();
     }
 ````
+
+## 如何扫描附近基站设备
+开启蓝牙扫描设备，使用指定构造方法BLEDevice(String name, String mac, int rri, byte[] scanRecord)来创建BLEDevice对象，getDevType()返回设备的类型
+````
+/**
+ * 设备类型
+ */
+public enum DeviceType {
+		UNKNOWN,//未知
+		CAIJIKA,//采集卡
+		XIONGKA,//无感胸卡
+		JIZHAN,//定位标签基站
+		JIZHAN_GATEWAY,//网关识别基站
+	}
+````
+ 属性名       | 类型           | 描述  
+ --------    | :-----------:  | :-----------: 
+ UNKNOWN     | 未知的(默认)    | 默认，未知的  
+ CAIJIKA     | 采集卡          | 有感巡更卡，需要手动来打卡  
+ XIONGKA     | 无感胸卡        | 无感巡更卡，只需要进入基站范围即可自动打卡
+ JIZHAN      | 定位标签基站    | 跟胸卡配合使用
+ JIZHAN      | 网关识别基站    | 
 
 
