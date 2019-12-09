@@ -40,6 +40,8 @@ public class MainActivity extends Activity {
     private TextView tv4;
     private TextView tv5;
 
+    private BTCallBack callback;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +85,7 @@ public class MainActivity extends Activity {
                     }
                 }).request());
 
-        BleHelper.getInstance().addCallBack(new BTCallBack(this) {
+        callback = new BTCallBack(this) {
             @Override
             public void onConnected(boolean isconnected) {
                 tv1.setText("设备名称：" + getDevName());
@@ -148,7 +150,8 @@ public class MainActivity extends Activity {
                 bt.setEnabled(true);
                 bt2.setEnabled(true);
             }
-        });
+        };
+        BleHelper.getInstance().addCallBack(callback);
         if (!getMac().isEmpty()) {
             tv1.setText("设备名称：" + getDevName());
             tv4.setText("MAC地址：" + getMac());
@@ -225,6 +228,7 @@ public class MainActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         BleHelper.getInstance().disconnect(this);
+        callback.destroy();
     }
 
     private String getDevName() {
