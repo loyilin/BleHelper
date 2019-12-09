@@ -41,6 +41,9 @@ dependencies {
 }
 ````
 
+## 构建环境
+需要minSdkVersion大于或等于19，否则将无法使用，注意Android6.0及以上手机系统需要开启定位权限和定位功能，否则扫描不到设备。
+
 ## 初始化
 在Application中初始化，别忘了在AndroidManifest中注册
 ```Java
@@ -48,18 +51,18 @@ public class APP extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        BleHelper.getInstance().init(this);
+        BleHelper.getInstance().initialize();
     }
 }
 ````
 ## 支持自定义配置
 ```Java
 BleConfig config = new BleConfig()
-   	.setRepeatConnect(true)//断开自动重连 默认true
-        .setCyclePower(true)//持续获取电量  默认true
-        .setIntervals(60000)//获取电量间隔时间 单位毫秒，值不能小于10000，默认10000
-        .setShowLog(true);//开启log输出  默认false
-BleHelper.getInstance().init(this, config);
+   	.setRepeatConnect(true)//自动重连 默认true
+        .setGetCycleElectricity(true)//持续发送电量请求  默认关闭
+        .setIntervals(60000)//获取电量间隔时间 单位毫秒，值不能小于5000，默认5000
+        .setDebug(true);//是否调试模式，开启Log显示 默认关闭
+BleHelper.getInstance().initialize(config);
 ````
 
 ## 扫描设备
@@ -70,12 +73,10 @@ private BluetoothAdapter.LeScanCallback le = new BluetoothAdapter.LeScanCallback
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    BLEDevice bleDevice = new BLEDevice(device.getName(), device.getAddress(), rssi);
+                    BLEDevice bleDevice = new BLEDevice(device.getName(), device.getAddress(), rssi, scanRecord);
                     Log.i("Load","获得蓝牙 地址："+bleDevice.getMac());
-                    if(!map.containsKey(bleDevice.getMac())) {
+                    if(bleDevice.getDevType() == BLEDevice.DeviceType.CAIJIKA && !map.containsKey(bleDevice.getMac())) {
                         map.put(bleDevice.getMac(),bleDevice);
-                        data.add(bleDevice);
-                        adapter.setData(data);
                     }
                 }
             });
@@ -97,10 +98,10 @@ mAdapter.startLeScan(le);
 ## 连接或断开设备
 ```Java
 //连接设备
-BleHelper.getInstance().connect("08:7c:BE:00:02:25");
+BleHelper.getInstance().connect(this, "08:7c:BE:00:02:25");
 
 //断开设备
-BleHelper.getInstance().disconnect();
+BleHelper.getInstance().disconnect(this);
 ````
 
 ## 获取当前连接的设备
@@ -116,21 +117,16 @@ String mac = device.getMac();
 ## 获取连接状态
 ```Java
 //当前连接状态
-boolean state = BleHelper.getInstance().ismConnectionState();
+boolean state = BleHelper.getInstance().isConnect();
 ````
 
 
-## 连接状态、打卡上传成功提醒、设备固件版本、电量回调（可在多个Activity中同时接收）
+## 连接状态、打卡、离线数据、设备固件版本、电量回调（可在多个Activity中同时接收）
 ```Java
 BleHelper.getInstance().addCallBack(new BTCallBack(this){
             @Override
             public void OnConnected(boolean isconnected) {
                 //连接状态，true连接，false断开
-            }
-            
-            @Override
-            public void OnUploadedSuccessfully(int total) {
-                ToastUtils.showShort("成功上传了"+total+"条数据");
             }
 
             @Override
@@ -142,34 +138,65 @@ BleHelper.getInstance().addCallBack(new BTCallBack(this){
             public void OnElectric(int electric, String lastcharge, boolean ischarge) {
                 //electric百分比电量，lastcharge最后一次充电时间，ischarge是否正在充电
             }
+	    
+	     Override
+            public void onPunch(BTBean card) {
+                ToastUtils.showShort("在线打卡：" + card.getTab_id());
+            }
+
+            @Override
+            public void onOffData(int total) {
+                ToastUtils.showShort("查询到离线数据 " + total + "条");
+            }
+
+            @Override
+            public void onOffProgress(int current, int total) {
+                LogUtils.e("离线数据进度：当前第" + current + "条，共" + total + "条");
+            }
+
+            @Override
+            public void onOffComplete(List<BTBean> data) {
+                ToastUtils.showShort("离线数据读取完成 共" + data.size() + "条");
+            }
         });
 ````
 
 
 ## OTA固件升级带进度
 ```Java
-//开始OTA升级
-BleHelper.getInstance().startOtaUpdate(filepath);
+//开始OTA升级 传入ota升级文件
+BleHelper.getInstance().startOtaUpdate(file);
 BleHelper.getInstance().addCallBack(new BTCallBack(this){
-            @Override
-            public void OnOTAProgress(int percent, int byteRate, int elapsedTime) {
-                //OTA升级进度
+             @Override
+            public void onOTAProgress(int percent, int byteRate, int elapsedTime) {
+                //ota升级进度
             }
 
             @Override
-            public void OnOTAComplete() {
-                //OTA升级成功
+            public void onOTASuccess() {
+                //ota升级成功
             }
 
             @Override
-            public void OnOTAFail(String error) {
-                //OTA升级失败
+            public void onOTAFail(String error) {
+                //ota升级失败
+            }
+
+            @Override
+            public void onOTAComplete() {
+                //ota升级完成，不管成功或失败最后都会执行
             }
         });
 ````
 
-## 构建环境
-需要minSdkVersion大于或等于19，否则将无法使用，注意Android6.0及以上手机系统需要开启定位权限和定位功能，否则扫描不到设备。
-
+## 注意
+如果不在使用监听器，请手动注销，节省资源
+````
+@Override
+    protected void onDestroy() {
+        super.onDestroy();
+        callback.destroy();
+    }
+````
 
 
