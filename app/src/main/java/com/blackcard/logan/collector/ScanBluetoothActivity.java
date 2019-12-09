@@ -31,16 +31,12 @@ public class ScanBluetoothActivity extends Activity {
 
     private BluetoothAdapter.LeScanCallback le = new BluetoothAdapter.LeScanCallback() {
         public void onLeScan(final BluetoothDevice device, final int rssi, byte[] scanRecord) {
-            if (device.getAddress().startsWith("08:7C") | device.getAddress().startsWith("D9:AD")){
-                runOnUiThread(() -> {
-                    BLEDevice bleDevice = new BLEDevice(device.getName(), device.getAddress(), rssi);
-                    if (!map.containsKey(bleDevice.getMac())) {
-                        Log.i("Load", "获得蓝牙 地址：" + bleDevice.getMac());
-                        map.put(bleDevice.getMac(), bleDevice);
-                        adapter.getData().add(bleDevice);
-                        adapter.notifyDataSetChanged();
-                    }
-                });
+            BLEDevice bleDevice = new BLEDevice(device.getName(), device.getAddress(), rssi, scanRecord);
+            if (!map.containsKey(bleDevice.getMac()) && (bleDevice.getDevType() == BLEDevice.DeviceType.XIONGKA || bleDevice.getDevType() == BLEDevice.DeviceType.CAIJIKA)){
+                Log.i("Load", "获得蓝牙 地址：" + bleDevice.getMac());
+                map.put(bleDevice.getMac(), bleDevice);
+                adapter.getData().add(bleDevice);
+                adapter.notifyDataSetChanged();
             }
         }
     };

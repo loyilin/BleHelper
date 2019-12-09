@@ -124,7 +124,7 @@ public class MainActivity extends Activity {
 
             @Override
             public void onElectric(int electric, long lastcharge, boolean ischarge) {
-                tv3.setText("剩余电量：" + (ischarge ? "正在充电中" : TimeUtils.millis2String(lastcharge) + "%\t\t\t\t上次充电时间：" + lastcharge));
+                tv3.setText("剩余电量：" + electric + "%\t\t\t\t" + (ischarge ? "正在充电中..." : "上次充电时间：" + (lastcharge == 0 ? "" : TimeUtils.millis2String(lastcharge))));
             }
 
             @Override
@@ -133,15 +133,20 @@ public class MainActivity extends Activity {
             }
 
             @Override
-            public void onOTAComplete() {
-                bt2.setText("升级到最新固件");
-                bt.setEnabled(true);
-                bt2.setEnabled(true);
+            public void onOTASuccess() {
+                ToastUtils.showShort("OTA升级成功");
             }
 
             @Override
             public void onOTAFail(String error) {
                 ToastUtils.showShort(error);
+            }
+
+            @Override
+            public void onOTAComplete() {
+                bt2.setText("升级到最新固件");
+                bt.setEnabled(true);
+                bt2.setEnabled(true);
             }
         });
         if (!getMac().isEmpty()) {
@@ -175,7 +180,7 @@ public class MainActivity extends Activity {
                 OtaBean bean = new Gson().fromJson(response.body().string(), OtaBean.class);
                 if (bean == null || !bean.getResult().equals("Sucess")) return;
                 DownloadUtil util = new DownloadUtil();
-                util.download("http://szydak.eicp.net:82/ezx_syset/download?filename="
+                util.download("http://www.allsps.com/ezx_syset/download?filename="
                                 + bean.getData1().getFilename() + "&filepath=" + bean.getData1().getPath()
                         , Environment.getExternalStorageDirectory().getAbsolutePath()
                         , bean.getData1().getFilename(), new DownloadUtil.DownloadProgress() {
