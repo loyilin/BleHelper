@@ -32,7 +32,7 @@ public class ScanBluetoothActivity extends Activity {
     private BluetoothAdapter.LeScanCallback le = new BluetoothAdapter.LeScanCallback() {
         public void onLeScan(final BluetoothDevice device, final int rssi, byte[] scanRecord) {
             BLEDevice bleDevice = new BLEDevice(device.getName(), device.getAddress(), rssi, scanRecord);
-            if (!map.containsKey(bleDevice.getMac()) && (bleDevice.getDevType() == BLEDevice.DeviceType.XIONGKA || bleDevice.getDevType() == BLEDevice.DeviceType.CAIJIKA)){
+            if (!map.containsKey(bleDevice.getMac()) /*&& (bleDevice.getDevType() == BLEDevice.DeviceType.XIONGKA || bleDevice.getDevType() == BLEDevice.DeviceType.CAIJIKA)*/){
                 Log.i("Load", "获得蓝牙 地址：" + bleDevice.getMac());
                 map.put(bleDevice.getMac(), bleDevice);
                 adapter.getData().add(bleDevice);
@@ -53,7 +53,8 @@ public class ScanBluetoothActivity extends Activity {
             @Override
             protected void convert(BaseViewHolder helper, BLEDevice item) {
                 helper.setText(android.R.id.text1, (item.getName().isEmpty() ?
-                        "未知设备" : item.getName()) + "\n" + item.getMac())
+                        "未知设备" : item.getName()) + "\t\t\t\t" + getDevtype(item.getDevType())
+                        +  "\t\t\t\t" + getJIZHANElectric(item) + "\n" + item.getMac())
                         .getConvertView().setPadding(30,20,30,20);
             }
         };
@@ -91,5 +92,24 @@ public class ScanBluetoothActivity extends Activity {
                         ToastUtils.showShort("用户拒绝权限");
                     }
                 }).request();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mAdapter != null) mAdapter.stopLeScan(le);
+    }
+
+    private String getDevtype(BLEDevice.DeviceType type){
+        if (type == BLEDevice.DeviceType.CAIJIKA) return "采集卡";
+        else if (type == BLEDevice.DeviceType.XIONGKA) return "无感胸卡";
+        else if (type == BLEDevice.DeviceType.JIZHAN) return "定位标签基站";
+        else if (type == BLEDevice.DeviceType.JIZHAN_GATEWAY) return "网关识别基站";
+        else return "未知设备";
+    }
+
+    private String getJIZHANElectric(BLEDevice device){
+        if (device.getDevType() == BLEDevice.DeviceType.JIZHAN) return device.getJIZHANElectric();
+        else return "";
     }
 }
