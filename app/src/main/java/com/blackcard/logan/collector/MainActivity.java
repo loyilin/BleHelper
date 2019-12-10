@@ -18,6 +18,7 @@ import com.blankj.utilcode.util.TimeUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.google.gson.Gson;
 import com.logan.bluetoothlibrary.BleHelper;
+import com.logan.bluetoothlibrary.bean.BLEDevice;
 import com.logan.bluetoothlibrary.bean.BTBean;
 import com.logan.bluetoothlibrary.itf.BTCallBack;
 
@@ -85,7 +86,7 @@ public class MainActivity extends Activity {
                     }
                 }).request());
 
-        callback = new BTCallBack(this) {
+        callback = new BTCallBack() {
             @Override
             public void onConnected(boolean isconnected) {
                 tv1.setText("设备名称：" + getDevName());
@@ -101,7 +102,7 @@ public class MainActivity extends Activity {
             @Override
             public void onVersion(String version) {
                 tv2.setText("固件版本：" + version);
-                bt2.setVisibility(View.VISIBLE);
+                bt2.setVisibility(BleHelper.getInstance().getDevice().getDevType() == BLEDevice.DeviceType.CAIJIKA ? View.VISIBLE : View.GONE);
             }
 
             @Override
@@ -228,7 +229,8 @@ public class MainActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         BleHelper.getInstance().disconnect(this);
-        callback.destroy();
+        //退出注销监听
+        BleHelper.getInstance().remoCallBack(callback);
     }
 
     private String getDevName() {
