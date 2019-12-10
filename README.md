@@ -1,6 +1,9 @@
 # Collector 蓝牙采集器SDK使用文档
 [![](https://jitpack.io/v/loyilin/collector.svg)](https://jitpack.io/#loyilin/collector)
 
+## 它能做什么
+配合我们的硬件通过蓝牙实现数据交互，还包括自动重连、自动获取电量，读取数据等
+
 ## 引入到项目中
 1 在根目录build.gradle文件中repositories方法中添加:
 ````Java
