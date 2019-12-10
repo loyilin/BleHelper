@@ -1,4 +1,4 @@
-# Collector 蓝牙采集器工具使用文档
+# Collector 蓝牙采集器SDK使用文档
 [![](https://jitpack.io/v/loyilin/collector.svg)](https://jitpack.io/#loyilin/collector)
 
 ## 引入到项目中
