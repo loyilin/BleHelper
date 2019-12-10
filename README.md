@@ -166,7 +166,7 @@ BleHelper.getInstance().addCallBack(new BTCallBack(this){
 
 ## OTA固件升级带进度
 ```Java
-//开始OTA升级 传入ota升级文件
+//开始OTA升级,传入ota升级文件,目前只支持采集卡类型ota升级
 BleHelper.getInstance().startOtaUpdate(file);
 BleHelper.getInstance().addCallBack(new BTCallBack(this){
              @Override
