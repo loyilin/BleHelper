@@ -123,7 +123,7 @@ String mac = device.getMac();
 boolean state = BleHelper.getInstance().isConnect();
 ````
 
-## 连接状态、打卡、离线数据、设备固件版本、电量回调（可在多个Activity中同时接收）
+## 连接状态、设备固件版本、电量回调、在线打卡、离线数据（可在多处同时接收）
 ```Java
 BleHelper.getInstance().addCallBack(new BTCallBack(this){
             @Override
