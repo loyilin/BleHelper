@@ -1,10 +1,14 @@
 package com.blackcard.logan.collector;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -12,10 +16,11 @@ import android.widget.TextView;
 
 import com.blackcard.logan.collector.bean.OtaBean;
 import com.blankj.utilcode.constant.PermissionConstants;
-import com.blankj.utilcode.util.LogUtils;
 import com.blankj.utilcode.util.PermissionUtils;
 import com.blankj.utilcode.util.TimeUtils;
 import com.blankj.utilcode.util.ToastUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.google.gson.Gson;
 import com.logan.bluetoothlibrary.BleHelper;
 import com.logan.bluetoothlibrary.bean.BLEDevice;
@@ -40,8 +45,11 @@ public class MainActivity extends Activity {
     private TextView tv1;
     private TextView tv4;
     private TextView tv5;
+    private RecyclerView recyclerview;
 
     private BTCallBack callback;
+    private BaseQuickAdapter<BTBean, BaseViewHolder> adapter;
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +64,18 @@ public class MainActivity extends Activity {
         tv5 = (TextView) findViewById(R.id.tv5);
         bt = (Button) findViewById(R.id.bt1);
         bt2 = (Button) findViewById(R.id.bt2);
+        recyclerview = (RecyclerView) findViewById(R.id.recyclerview);
+        adapter = new BaseQuickAdapter<BTBean, BaseViewHolder>(android.R.layout.simple_list_item_1) {
+            @Override
+            protected void convert(BaseViewHolder helper, BTBean item) {
+                helper.setText(android.R.id.text1, item.getTab_id() + "\t\t\t\t\t" + item.getMac()
+                        + "\n" + item.getCheck_in())
+                        .getConvertView().setPadding(30,20,30,20);
+            }
+        };
+        recyclerview.setLayoutManager(new LinearLayoutManager(this));
+        recyclerview.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        recyclerview.setAdapter(adapter);
 
         bt.setOnClickListener(v -> {
             if (bt.getText().toString().equals("扫描设备")) {
@@ -68,6 +88,7 @@ public class MainActivity extends Activity {
                 tv3.setText("剩余电量：");
                 tv4.setText("MAC地址：");
                 tv5.setText("连接状态：");
+                adapter.setNewData(null);
                 clearDev();
             }
         });
@@ -107,22 +128,29 @@ public class MainActivity extends Activity {
 
             @Override
             public void onPunch(BTBean card) {
+                adapter.addData(card);
                 ToastUtils.showShort("在线打卡：" + card.getTab_id());
             }
 
             @Override
             public void onOffData(int total) {
                 ToastUtils.showShort("查询到离线数据 " + total + "条");
+                dialog = new AlertDialog.Builder(MainActivity.this)
+                        .setTitle("查询到离线数据共 " + total + " 条")
+                        .setMessage("是否要读取？")
+                        .setPositiveButton("读取", (dialog, which) -> BleHelper.getInstance().startOffLineData())
+                        .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
+                        .show();
             }
 
             @Override
             public void onOffProgress(int current, int total) {
-                LogUtils.e("离线数据进度：当前第" + current + "条，共" + total + "条");
+                ToastUtils.showShort("离线数据进度：当前第" + current + "条，共" + total + "条");
             }
 
             @Override
             public void onOffComplete(List<BTBean> data) {
-                ToastUtils.showShort("离线数据读取完成 共" + data.size() + "条");
+                adapter.setNewData(data);
             }
 
             @Override
@@ -228,6 +256,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (dialog != null) dialog.dismiss();
         BleHelper.getInstance().disconnect(this);
         //退出注销监听
         BleHelper.getInstance().remoCallBack(callback);
