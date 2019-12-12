@@ -47,8 +47,17 @@ dependencies {
 ## 构建环境
 需要minSdkVersion大于或等于19，否则将无法使用，注意Android6.0及以上手机系统需要开启定位权限和定位功能，否则扫描不到设备。
 
+## 添加权限
+在AndroidManifest中添加以下权限
+````Java
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+````
+
 ## 初始化
-在Application中初始化，别忘了在AndroidManifest中注册
+在Application中初始化
 ```Java
 public class APP extends Application {
     @Override
@@ -86,12 +95,12 @@ private BluetoothAdapter.LeScanCallback le = new BluetoothAdapter.LeScanCallback
         }
 };
 BluetoothManager manager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        if(manager==null){
+        if(manager == null){
             Toast.makeText(this,"不支持蓝牙",Toast.LENGTH_SHORT).show();
             finish();
         }
         mAdapter = manager.getAdapter();
-        if(mAdapter==null){
+        if(mAdapter == null){
             Toast.makeText(this,"不支持蓝牙",Toast.LENGTH_SHORT).show();
             finish();
         }
@@ -193,7 +202,7 @@ BleHelper.getInstance().addCallBack(new BTCallBack(this){
 
 ## 注意
 如果不在使用监听器，请手动注销，节省资源
-````
+````Java
 @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -203,7 +212,7 @@ BleHelper.getInstance().addCallBack(new BTCallBack(this){
 
 ## 如何扫描附近基站设备
 开启蓝牙扫描设备，使用指定构造方法 BLEDevice(String name, String mac, int rri, byte[] scanRecord) 来创建BLEDevice对象，getDevType()返回设备的类型
-````
+````Java
 /**
  * 设备类型
  */
