@@ -37,12 +37,12 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:25.4.0'
     implementation 'com.android.support:recyclerview-v7:25.4.0'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.35'
-    implementation 'com.blankj:utilcode:1.19.4'
+    implementation 'com.blankj:utilcode:1.24.0'
     //    implementation 'org.greenrobot:greendao:3.2.2'
     //    implementation 'net.zetetic:android-database-sqlcipher:3.5.9@aar'
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
     implementation 'com.google.code.gson:gson:2.8.5'
 
-    implementation 'com.github.loyilin:BleHelper:1.5.5'
-//    implementation project(':bluetoothlibrary')
+//    implementation 'com.github.loyilin:BleHelper:1.5.6'
+    implementation project(':bluetoothlibrary')
 }
