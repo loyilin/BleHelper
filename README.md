@@ -1,4 +1,4 @@
-# BleHelper 蓝牙采集器SDK使用文档
+# BleHelper 蓝牙SDK使用文档
 [![](https://jitpack.io/v/loyilin/BleHelper.svg)](https://jitpack.io/#loyilin/BleHelper)
 
 ## 它能做什么
