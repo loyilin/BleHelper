@@ -1,5 +1,5 @@
-# Collector 蓝牙采集器SDK使用文档
-[![](https://jitpack.io/v/loyilin/collector.svg)](https://jitpack.io/#loyilin/collector)
+# BleHelper 蓝牙采集器SDK使用文档
+[![](https://jitpack.io/v/loyilin/BleHelper.svg)](https://jitpack.io/#loyilin/BleHelper)
 
 ## 它能做什么
 配合我们的硬件通过蓝牙实现数据交互，还包括自动重连、自动获取电量，读取数据等
