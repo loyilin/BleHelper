@@ -232,4 +232,5 @@ public enum DeviceType {
  JIZHAN         | 定位标签基站    | 跟胸卡配合使用
  JIZHAN_GATEWAY | 网关识别基站    | 
 
+深圳市黑卡科技有限公司提供更新和维护
 
