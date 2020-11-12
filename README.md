@@ -86,9 +86,11 @@ private BluetoothAdapter.LeScanCallback le = new BluetoothAdapter.LeScanCallback
                 @Override
                 public void run() {
                     BLEDevice bleDevice = new BLEDevice(device.getName(), device.getAddress(), rssi, scanRecord);
-                    Log.i("Load","获得蓝牙 地址："+bleDevice.getMac());
                     if(bleDevice.getDevType() == BLEDevice.DeviceType.CAIJIKA && !map.containsKey(bleDevice.getMac())) {
                         map.put(bleDevice.getMac(),bleDevice);
+                        Log.i("Load","蓝牙地址："+bleDevice.getMac());
+                        Log.i("Load","电量："+bleDevice.getJIZHANElectric());//只有基站才有电量
+                        Log.i("Load","型号强度："+bleDevice.getRri());
                     }
                 }
             });
@@ -211,7 +213,9 @@ BleHelper.getInstance().addCallBack(new BTCallBack(this){
 ````
 
 ## 如何扫描附近基站设备
-开启蓝牙扫描设备，使用指定构造方法 BLEDevice(String name, String mac, int rri, byte[] scanRecord) 来创建BLEDevice对象，getDevType()返回设备的类型
+开启蓝牙扫描设备，使用指定构造方法 BLEDevice(String name, String mac, int rri, byte[] scanRecord) 来创建BLEDevice对象。
+getDevType：         返回设备的类型
+getJIZHANElectric：  返回电量（只有基站才有电量）
 ````Java
 /**
  * 设备类型
