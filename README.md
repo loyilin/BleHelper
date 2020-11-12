@@ -18,7 +18,7 @@ allprojects {
 2 添加依赖关系
 ````Java
 dependencies {
-	implementation 'com.github.loyilin:BleHelper:1.5.6'
+	implementation 'com.github.loyilin:BleHelper:1.6.0'
 }
 ````
 

@@ -35,13 +35,8 @@ public class ScanBluetoothActivity extends Activity {
             if (BuildConfig.DEBUG) Log.d("LeScan", String.format("设备名 = %2s, mac = %2s\n广播 = %2s"
                     , device.getName(), device.getAddress(), Arrays.toString(scanRecord)));
             BLEDevice bleDevice = new BLEDevice(device.getName(), device.getAddress(), rssi, scanRecord);
-
-            Log.i("Load","获得基站电量："+bleDevice.getJIZHANElectric());
-            Log.i("Load","获得设备类型："+bleDevice.getLastTime());
-
-
             if (!map.containsKey(bleDevice.getMac()) /*&& (bleDevice.getDevType() == BLEDevice.DeviceType.XIONGKA || bleDevice.getDevType() == BLEDevice.DeviceType.CAIJIKA)*/){
-                Log.d("LeScan", "获得蓝牙 地址：" + bleDevice.getMac());
+                Log.i("LeScan", "蓝牙地址：" + bleDevice.getMac());
                 map.put(bleDevice.getMac(), bleDevice);
                 adapter.getData().add(bleDevice);
                 adapter.notifyDataSetChanged();
