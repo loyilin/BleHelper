@@ -214,9 +214,10 @@ BleHelper.getInstance().addCallBack(new BTCallBack(this){
 
 ## 如何扫描附近基站设备
 开启蓝牙扫描设备，使用指定构造方法 BLEDevice(String name, String mac, int rri, byte[] scanRecord) 来创建BLEDevice对象。
-getDevType：         返回设备的类型
-getJIZHANElectric：  返回电量（只有基站才有电量）
 ````Java
+getDevType：       返回设备的类型
+getJIZHANElectric：返回电量（只有基站才有电量）
+
 /**
  * 设备类型
  */
