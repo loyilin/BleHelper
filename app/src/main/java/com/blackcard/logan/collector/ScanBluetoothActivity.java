@@ -57,7 +57,8 @@ public class ScanBluetoothActivity extends Activity {
             protected void convert(BaseViewHolder helper, BLEDevice item) {
                 helper.setText(android.R.id.text1, (item.getName().isEmpty() ?
                         "未知设备" : item.getName()) + "\t\t\t\t" + getDevtype(item.getDevType())
-                        +  "\t\t\t\t" + getJIZHANElectric(item) + "\n" + item.getMac())
+                        +  (item.getDevType() == BLEDevice.DeviceType.JIZHAN ? ("\n" + getJIZHANElectric(item)) : "")
+                        + "\n" + item.getMac() + "\t\t\t\t信号强度：" + item.getRri() )
                         .getConvertView().setPadding(30,20,30,20);
             }
         };
